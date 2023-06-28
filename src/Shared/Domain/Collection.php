@@ -2,17 +2,14 @@
 
 declare(strict_types=1);
 
-namespace App\Shared\Domain\Criteria;
+namespace App\Shared\Domain;
 
-use ArrayIterator;
-use Countable;
 use IteratorAggregate;
-use JetBrains\PhpStorm\Pure;
 
 /**
  * @implements IteratorAggregate<int, mixed>
  */
-abstract class Collection implements Countable, IteratorAggregate
+abstract readonly class Collection implements \Countable, \IteratorAggregate
 {
     /**
      * @param array<int, mixed> $items
@@ -25,14 +22,13 @@ abstract class Collection implements Countable, IteratorAggregate
     abstract protected function type(): string;
 
     /**
-     * @return ArrayIterator<int, mixed>
+     * @return \ArrayIterator<int, mixed>
      */
-    public function getIterator(): ArrayIterator
+    public function getIterator(): \ArrayIterator
     {
-        return new ArrayIterator($this->items());
+        return new \ArrayIterator($this->items());
     }
 
-    #[Pure]
     public function count(): int
     {
         return count($this->items());
@@ -44,14 +40,5 @@ abstract class Collection implements Countable, IteratorAggregate
     protected function items(): array
     {
         return $this->items;
-    }
-
-    protected function add(mixed $item): self
-    {
-        Assert::instanceOf($this->type(), $item);
-
-        $this->items[] = $item;
-
-        return $this;
     }
 }

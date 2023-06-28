@@ -1,0 +1,18 @@
+#!/usr/bin/env php
+<?php
+
+declare(strict_types=1);
+
+use Doctrine\ORM\Tools\Console\ConsoleRunner;
+use Doctrine\ORM\Tools\Console\EntityManagerProvider\SingleManagerProvider;
+
+require __DIR__.'/./../src/bootstrap.php';
+
+try {
+    ConsoleRunner::run(
+        new SingleManagerProvider(getEntityManager())
+    );
+} catch (Throwable $exception) {
+    var_dump($exception->getMessage());
+    exit;
+}

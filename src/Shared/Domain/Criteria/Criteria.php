@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace App\Shared\Domain\Criteria;
 
-use JetBrains\PhpStorm\Pure;
-
-class Criteria
+final readonly class Criteria
 {
     public function __construct(
         private Filters $filters,
@@ -16,13 +14,11 @@ class Criteria
     ) {
     }
 
-    #[Pure]
     public function hasFilters(): bool
     {
         return $this->filters->count() > 0;
     }
 
-    #[Pure]
     public function hasOrder(): bool
     {
         return !$this->order->isNone();
@@ -31,7 +27,6 @@ class Criteria
     /**
      * @return Filter[]
      */
-    #[Pure]
     public function plainFilters(): array
     {
         return $this->filters->filters();

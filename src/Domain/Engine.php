@@ -15,29 +15,29 @@ final class Engine
     #[ORM\GeneratedValue]
     private int $id;
 
-    #[ORM\Column(type: 'string', length: 255)]
+    #[ORM\Column(type: 'string', length: 255, nullable: false)]
     private string $type;
 
-    #[ORM\Column(type: 'string', length: 255)]
+    #[ORM\Column(type: 'string', length: 255, nullable: false)]
     private string $code;
 
-    #[ORM\Column(type: 'string', length: 255)]
+    #[ORM\Column(type: 'string', length: 255, nullable: false)]
     private string $alignment;
 
-    #[ORM\Column(type: 'string', length: 255)]
+    #[ORM\Column(type: 'string', length: 255, nullable: false)]
     private string $position;
 
-    #[ORM\Column(type: 'integer')]
+    #[ORM\Column(type: 'integer', nullable: false)]
     private int $size;
 
-    #[ORM\Column(type: 'integer')]
+    #[ORM\Column(type: 'integer', nullable: false)]
     private int $numberOfValves;
 
-    #[ORM\Column(type: 'float')]
+    #[ORM\Column(type: 'float', nullable: false)]
     private float $compressionRatio;
 
-    #[ORM\ManyToOne(targetEntity: Fuel::class)]
-    #[ORM\JoinColumn(name: 'fuel_id', referencedColumnName: 'id')]
+    #[ORM\ManyToOne(targetEntity: Fuel::class, cascade: ['persist'])]
+    #[ORM\JoinColumn(name: 'fuel_id', referencedColumnName: 'id', nullable: false)]
     private Fuel $fuel;
 
     public function id(): int
@@ -55,9 +55,11 @@ final class Engine
         return $this->type;
     }
 
-    public function setType(string $type): void
+    public function setType(string $type): self
     {
         $this->type = $type;
+
+        return $this;
     }
 
     public function code(): string
@@ -65,9 +67,11 @@ final class Engine
         return $this->code;
     }
 
-    public function setCode(string $code): void
+    public function setCode(string $code): self
     {
         $this->code = $code;
+
+        return $this;
     }
 
     public function alignment(): string
@@ -75,9 +79,11 @@ final class Engine
         return $this->alignment;
     }
 
-    public function setAlignment(string $alignment): void
+    public function setAlignment(string $alignment): self
     {
         $this->alignment = $alignment;
+
+        return $this;
     }
 
     public function position(): string
@@ -85,9 +91,11 @@ final class Engine
         return $this->position;
     }
 
-    public function setPosition(string $position): void
+    public function setPosition(string $position): self
     {
         $this->position = $position;
+
+        return $this;
     }
 
     public function size(): int
@@ -95,9 +103,11 @@ final class Engine
         return $this->size;
     }
 
-    public function setSize(int $size): void
+    public function setSize(int $size): self
     {
         $this->size = $size;
+
+        return $this;
     }
 
     public function numberOfValves(): int
@@ -105,9 +115,11 @@ final class Engine
         return $this->numberOfValves;
     }
 
-    public function setNumberOfValves(int $numberOfValves): void
+    public function setNumberOfValves(int $numberOfValves): self
     {
         $this->numberOfValves = $numberOfValves;
+
+        return $this;
     }
 
     public function compressionRatio(): float
@@ -115,9 +127,11 @@ final class Engine
         return $this->compressionRatio;
     }
 
-    public function setCompressionRatio(float $compressionRatio): void
+    public function setCompressionRatio(float $compressionRatio): self
     {
         $this->compressionRatio = $compressionRatio;
+
+        return $this;
     }
 
     public function fuel(): Fuel
@@ -125,8 +139,10 @@ final class Engine
         return $this->fuel;
     }
 
-    public function setFuel(Fuel $fuel): void
+    public function setFuel(Fuel $fuel): self
     {
         $this->fuel = $fuel;
+
+        return $this;
     }
 }

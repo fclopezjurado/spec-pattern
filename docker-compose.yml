@@ -2,10 +2,9 @@ version: "3.7"
 
 services:
   php-fpm:
-#    container_name: spec-pattern-fpm
-    #    image: spec-pattern-php
+    image: spec-pattern-php
     env_file:
-      - .env
+      - "${ENV_FILE}"
     build:
       dockerfile: ./docker/php/Dockerfile
       context: .
@@ -16,15 +15,28 @@ services:
       - ./docker/php/conf.d/error_reporting.ini:/usr/local/etc/php/conf.d/error_reporting.ini
 
   db:
-#    container_name: spec-pattern-db
-    image: mysql:5.6
+    image: mysql:8
     env_file:
-      - .env
+      - "${ENV_FILE}"
+#    environment:
+#      MYSQL_ROOT_PASSWORD: "${MYSQL_ROOT_PASSWORD}"
+#      MYSQL_DATABASE: "${MYSQL_DATABASE}"
+#      MYSQL_USER: "${MYSQL_USER}"
+#      MYSQL_PASSWORD: "${MYSQL_PASSWORD}"
+#      MYSQL_HOST: "${MYSQL_HOST}"
     volumes:
       - ./docker/mysql/docker.cnf:/etc/mysql/conf.d/docker.cnf
       - db-volume:/var/lib/mysql
     ports:
       - "${MYSQL_EXPOSED_PORT}:3306"
+    healthcheck:
+      test: mysql ${MYSQL_DATABASE} --user=${MYSQL_USER} --password='${MYSQL_PASSWORD}' --silent --execute "SELECT 1;"
+#      test: ["CMD-SHELL", "mysqladmin ping -h localhost -u ${MYSQL_ROOT_USER} -p ${MYSQL_ROOT_PASSWORD} -P ${MYSQL_EXPOSED_PORT}" ]
+#      test: [ "CMD", "mysqladmin" ,"ping", "-h", "${MYSQL_HOST}", "-uroot", "-p${MYSQL_ROOT_PASSWORD}", "-P${MYSQL_EXPOSED_PORT}" ]
+#      test: [ "CMD", "mysqladmin" ,"ping", "-h", "${MYSQL_HOST}", "-uroot", "-p${MYSQL_ROOT_PASSWORD}", "-P${MYSQL_EXPOSED_PORT}" ]
+      interval: 5s
+      timeout: 5s
+      retries: 20
 
 volumes:
   db-volume:

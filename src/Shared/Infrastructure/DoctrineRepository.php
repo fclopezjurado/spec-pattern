@@ -7,11 +7,13 @@ namespace App\Shared\Infrastructure;
 use App\Shared\Domain\Aggregate\AggregateRoot;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\Exception\NotSupported;
+use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\OptimisticLockException;
 
 abstract class DoctrineRepository
 {
-    public function __construct(private EntityManager $entityManager)
+    public function __construct(private readonly EntityManager $entityManager)
     {
     }
 
@@ -22,7 +24,7 @@ abstract class DoctrineRepository
 
     /**
      * @throws OptimisticLockException
-     * @throws \Doctrine\ORM\ORMException
+     * @throws ORMException
      */
     protected function persist(AggregateRoot $entity): void
     {
@@ -32,7 +34,7 @@ abstract class DoctrineRepository
 
     /**
      * @throws OptimisticLockException
-     * @throws \Doctrine\ORM\ORMException
+     * @throws ORMException
      */
     protected function remove(AggregateRoot $entity): void
     {
@@ -41,10 +43,11 @@ abstract class DoctrineRepository
     }
 
     /**
-     * @param string $entityClass
      * @psalm-param class-string<AggregateRoot> $entityClass
      *
      * @return EntityRepository<AggregateRoot>
+     *
+     * @throws NotSupported
      */
     protected function repository(string $entityClass): EntityRepository
     {

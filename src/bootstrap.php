@@ -2,31 +2,30 @@
 
 declare(strict_types=1);
 
+use Doctrine\DBAL\DriverManager;
 use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\Tools\Setup;
-use Dotenv\Dotenv;
+use Doctrine\ORM\Exception\MissingMappingDriverImplementation;
+use Doctrine\ORM\ORMSetup;
 
 require_once __DIR__.'/../vendor/autoload.php';
 
-$dotenv = Dotenv::createImmutable(__DIR__);
+/**
+ * @throws MissingMappingDriverImplementation
+ * @throws \Doctrine\DBAL\Exception
+ */
+function getEntityManager(): EntityManager
+{
+    $configuration = ORMSetup::createAttributeMetadataConfiguration(
+        paths: [__DIR__.'/Domain'],
+        isDevMode: true,
+    );
+    $connection = DriverManager::getConnection([
+        'dbname' => $_ENV['MYSQL_DATABASE'],
+        'user' => $_ENV['MYSQL_USER'],
+        'password' => $_ENV['MYSQL_PASSWORD'],
+        'host' => $_ENV['MYSQL_HOST'],
+        'driver' => $_ENV['MYSQL_DRIVER'],
+    ], $configuration);
 
-$dotenv->load();
-
-$configurationOptions = Setup::createAttributeMetadataConfiguration(
-    paths: [__DIR__.'/src'],
-    isDevMode: true,
-);
-$connectionParameters = [
-    'dbname' => $_ENV['MYSQL_DATABASE'],
-    'user' => $_ENV['MYSQL_USER'],
-    'password' => $_ENV['MYSQL_PASSWORD'],
-    'host' => $_ENV['MYSQL_ROOT_HOST'],
-    'driver' => $_ENV['MYSQL_DRIVER'],
-];
-
-try {
-    $entityManager = EntityManager::create($connectionParameters, $configurationOptions);
-} catch (Throwable $exception) {
-    var_dump($exception->getMessage());
-    exit;
+    return new EntityManager($connection, $configuration);
 }

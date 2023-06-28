@@ -15,11 +15,11 @@ final class Fuel
     #[ORM\GeneratedValue]
     private int $id;
 
-    #[ORM\Column(type: 'string', length: 255)]
+    #[ORM\Column(type: 'string', length: 255, nullable: false)]
     private string $type;
 
-    #[ORM\Column(type: 'string', length: 255)]
-    private string $system;
+    #[ORM\Column(type: 'string', length: 255, nullable: false)]
+    private string $design;
 
     public function id(): int
     {
@@ -36,18 +36,22 @@ final class Fuel
         return $this->type;
     }
 
-    public function setType(string $type): void
+    public function setType(string $type): self
     {
         $this->type = $type;
+
+        return $this;
     }
 
-    public function system(): string
+    public function design(): string
     {
-        return $this->system;
+        return $this->design;
     }
 
-    public function setSystem(string $system): void
+    public function setDesign(string $design): self
     {
-        $this->system = $system;
+        $this->design = $design;
+
+        return $this;
     }
 }

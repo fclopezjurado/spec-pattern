@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Domain;
 
-use App\Shared\Domain\Criteria\Collection;
+use App\Shared\Domain\Collection;
 
-final class Cars extends Collection
+final readonly class Cars extends Collection
 {
     protected function type(): string
     {

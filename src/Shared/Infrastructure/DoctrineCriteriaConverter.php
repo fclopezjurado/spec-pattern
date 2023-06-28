@@ -11,9 +11,8 @@ use App\Shared\Domain\Criteria\OrderBy;
 use Doctrine\Common\Collections\Criteria as DoctrineCriteria;
 use Doctrine\Common\Collections\Expr\Comparison;
 use Doctrine\Common\Collections\Expr\CompositeExpression;
-use JetBrains\PhpStorm\Pure;
 
-final class DoctrineCriteriaConverter
+final readonly class DoctrineCriteriaConverter
 {
     /**
      * @param array<string, string> $criteriaToDoctrineFields
@@ -74,7 +73,6 @@ final class DoctrineCriteriaConverter
         };
     }
 
-    #[Pure]
     private function mapFieldValue(FilterField $field): string
     {
         return array_key_exists($field->value(), $this->criteriaToDoctrineFields)
@@ -85,7 +83,6 @@ final class DoctrineCriteriaConverter
     /**
      * @return array<string>|null
      */
-    #[Pure]
     private function formatOrder(Criteria $criteria): ?array
     {
         if (!$criteria->hasOrder()) {
@@ -95,7 +92,6 @@ final class DoctrineCriteriaConverter
         return [$this->mapOrderBy($criteria->order()->by()) => $criteria->order()->type()->value];
     }
 
-    #[Pure]
     private function mapOrderBy(OrderBy $field): string
     {
         return array_key_exists($field->value(), $this->criteriaToDoctrineFields)

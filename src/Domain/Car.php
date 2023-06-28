@@ -11,22 +11,28 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Table(name: 'car')]
 final class Car extends AggregateRoot
 {
+    public const ID_FIELD_NAME = 'id';
+    public const ENGINE_FIELD_NAME = 'engine';
+    public const COLOR_FIELD_NAME = 'color';
+    public const NAME_FIELD_NAME = 'name';
+    public const NEW_FIELD_NAME = 'new';
+
     #[ORM\Id]
     #[ORM\Column(type: 'integer')]
     #[ORM\GeneratedValue]
     private int $id;
 
-    #[ORM\ManyToOne(targetEntity: Engine::class)]
-    #[ORM\JoinColumn(name: 'engine_id', referencedColumnName: 'id')]
+    #[ORM\ManyToOne(targetEntity: Engine::class, cascade: ['persist'])]
+    #[ORM\JoinColumn(name: 'engine_id', referencedColumnName: 'id', nullable: false)]
     private Engine $engine;
 
-    #[ORM\Column(type: 'string', length: 32)]
-    private Color $color;
+    #[ORM\Column(type: 'string', length: 32, nullable: false)]
+    private string $color;
 
-    #[ORM\Column(type: 'string', length: 255)]
+    #[ORM\Column(type: 'string', length: 255, nullable: false)]
     private string $name;
 
-    #[ORM\Column(type: 'boolean')]
+    #[ORM\Column(type: 'boolean', nullable: false)]
     private bool $new;
 
     public function id(): int
@@ -53,12 +59,12 @@ final class Car extends AggregateRoot
 
     public function color(): Color
     {
-        return $this->color;
+        return Color::from($this->color);
     }
 
     public function setColor(Color $color): self
     {
-        $this->color = $color;
+        $this->color = $color->value;
 
         return $this;
     }

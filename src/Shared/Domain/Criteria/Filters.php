@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Shared\Domain\Criteria;
 
-use JetBrains\PhpStorm\Pure;
+use App\Shared\Domain\Collection;
 
-final class Filters extends Collection
+final readonly class Filters extends Collection
 {
     /**
      * @param array<int, array{field: string, operator: FilterOperator, value: string}> $values
@@ -19,7 +19,6 @@ final class Filters extends Collection
     /**
      * @return Filter[]
      */
-    #[Pure]
     public function filters(): array
     {
         return $this->items();
